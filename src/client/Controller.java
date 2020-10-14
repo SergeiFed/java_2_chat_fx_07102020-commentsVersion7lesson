@@ -42,16 +42,17 @@ public class Controller implements Initializable { // Имплиментим и�
 
     private boolean authenticated;
     private String nickname;
-
+    // Метод, который убирает окно логина и пароля и дает вход в чат
     public void setAuthenticated(boolean authenticated) {
+
         this.authenticated = authenticated;
         authPanel.setVisible(!authenticated);
         authPanel.setManaged(!authenticated);
         msgPanel.setVisible(authenticated);
         msgPanel.setManaged(authenticated);
 
-        if (!authenticated) {
-            nickname = "";
+        if (!authenticated) { // если authenticated фолс
+            nickname = ""; // сделай никнейм пустым
             setTitle("Балабол");
         } else {
             setTitle(String.format("[ %s ] - Балабол", nickname));
@@ -67,9 +68,9 @@ public class Controller implements Initializable { // Имплиментим и�
         Platform.runLater(() -> {
             stage = (Stage) textField.getScene().getWindow();
         });
-        setAuthenticated(false);
+        setAuthenticated(false); // Тут мы закрываем окно ввода логина с паролем
     }
-
+    // метод подключения
     private void connect() {
         try {
             socket = new Socket(IP_ADDRESS, PORT); // таким образом мы подключаемся и конкретно говорим куда
@@ -82,8 +83,8 @@ public class Controller implements Initializable { // Имплиментим и�
                     while (true) { //
                         String str = in.readUTF(); //
 
-                        if (str.startsWith("/authok ")) {
-                            nickname = str.split("\\s")[1];
+                        if (str.startsWith("/authok ")) { // если от сервака придет это то мы вытаскиваем ник
+                            nickname = str.split("\\s")[1]; // Берем 2-ое слово с приходящего с сервака
                             setAuthenticated(true);
                             break;
                         }
@@ -134,16 +135,17 @@ public class Controller implements Initializable { // Имплиментим и�
         }
     }
 
-    public void tryToAuth(ActionEvent actionEvent) {
-        if (socket == null || socket.isClosed()) {
+
+    public void tryToAuth(ActionEvent actionEvent) { // метод чтобы сразу человек не подключился
+        if (socket == null || socket.isClosed()) { // Если соккет неинициализирован и мы не запускали коннект
             connect();
         }
 
         String msg = String.format("/auth %s %s",
-                loginField.getText().trim(), passwordField.getText().trim());
+                loginField.getText().trim(), passwordField.getText().trim()); // создаем формат логина и пароля на проверку
         try {
-            out.writeUTF(msg);
-            passwordField.clear();
+            out.writeUTF(msg); // отправляем это серваку
+            passwordField.clear(); // чистим поле пароля
         } catch (IOException e) {
             e.printStackTrace();
         }

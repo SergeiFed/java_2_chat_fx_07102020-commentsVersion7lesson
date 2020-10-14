@@ -12,15 +12,15 @@
       xmlns:fx="http://javafx.com/fxml" alignment="center">
   <!-- Берем за основу вертикальный бокс  и даем ему присваиваем ему работу через контроллерб распологаем по центру-->
     <HBox fx:id="authPanel"> <!-- создаем горизонтальный бокс с id  -->
-        <TextField promptText="login" fx:id="loginField" HBox.hgrow="ALWAYS"/> <!-- -->
+        <TextField promptText="login" fx:id="loginField" HBox.hgrow="ALWAYS"/> <!-- поле логина с id и говорим  -->
         <PasswordField fx:id="passwordField" promptText="password" HBox.hgrow="ALWAYS" onAction="#tryToAuth"/>
-      <!-- -->
-        <Button text="sign in" onAction="#tryToAuth" minWidth="60"/> <!-- -->
+      <!-- Филд пароля -->
+        <Button text="sign in" onAction="#tryToAuth" minWidth="60"/> <!-- кнопка отправки данных логина и пароля -->
     </HBox> <!-- -->
 
     <TextArea fx:id="textArea" VBox.vgrow="ALWAYS" editable="false"/> <!--  -->
 
-    <HBox fx:id="msgPanel" visible="false" managed="false"> <!-- -->
+    <HBox fx:id="msgPanel" visible="false" managed="false"> <!-- Визибл ставим на панель изнально фолс и поля место фолс на боксе -->
         <TextField promptText="input message" fx:id="textField" HBox.hgrow="ALWAYS"
                    onAction="#sendMsg"/> <!-- -->
         <Button text="send" onAction="#sendMsg"/> <!-- -->

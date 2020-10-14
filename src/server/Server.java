@@ -16,7 +16,7 @@ public class Server {
 
     public Server() {
         clients = new CopyOnWriteArrayList<>(); // создаем арай лист потокобезопасный
-        authService = new SimpleAuthService();
+        authService = new SimpleAuthService(); // создаем объект проверки аутоитендификации
         ServerSocket server = null;
         Socket socket = null;
         final int PORT = 8189;
