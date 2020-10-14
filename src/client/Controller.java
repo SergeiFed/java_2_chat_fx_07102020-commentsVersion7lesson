@@ -17,7 +17,7 @@ import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class Controller implements Initializable {
+public class Controller implements Initializable { // Имплиментим интерфейс Initializable
     @FXML
     private TextArea textArea;
     @FXML
@@ -34,9 +34,9 @@ public class Controller implements Initializable {
     private final String IP_ADDRESS = "localhost";
     private final int PORT = 8189;
 
-    private Socket socket;
-    private DataInputStream in;
-    private DataOutputStream out;
+    private Socket socket; // Клиентский соккет
+    private DataInputStream in; // переменная входящего потока
+    private DataOutputStream out; // переменная исходящего потока
 
     private Stage stage;
 
@@ -62,6 +62,8 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // Этот метод автоматически запустится когда все
+        // компаненты чата прогрузятся и будут готовы к работы
         Platform.runLater(() -> {
             stage = (Stage) textField.getScene().getWindow();
         });
@@ -70,15 +72,15 @@ public class Controller implements Initializable {
 
     private void connect() {
         try {
-            socket = new Socket(IP_ADDRESS, PORT);
-            in = new DataInputStream(socket.getInputStream());
-            out = new DataOutputStream(socket.getOutputStream());
+            socket = new Socket(IP_ADDRESS, PORT); // таким образом мы подключаемся и конкретно говорим куда
+            in = new DataInputStream(socket.getInputStream()); // Создаем и открываем поток который считывает входящий поток
+            out = new DataOutputStream(socket.getOutputStream()); // Создаем и открываем поток который считывает исходящий поток
 
-            new Thread(() -> {
-                try {
+            new Thread(() -> { //
+                try { //
                     //цикл аутентификации
-                    while (true) {
-                        String str = in.readUTF();
+                    while (true) { //
+                        String str = in.readUTF(); //
 
                         if (str.startsWith("/authok ")) {
                             nickname = str.split("\\s")[1];
@@ -91,22 +93,22 @@ public class Controller implements Initializable {
 
                     //цикл работы
                     while (true) {
-                        String str = in.readUTF();
+                        String str = in.readUTF(); // Считываем данные циклом входящим потоком
 
-                        if (str.equals("/end")) {
+                        if (str.equals("/end")) { // Если end то на выход
                             break;
                         }
 
-                        textArea.appendText(str + "\n");
+                        textArea.appendText(str + "\n"); // переносим текст в текст арию
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                } finally {
+                } finally { // сработает если придет /end от сервера.
                     setAuthenticated(false);
                     try {
-                        socket.close();
-                        in.close();
-                        out.close();
+                        socket.close(); // закрываем потоки
+                        in.close(); //
+                        out.close(); //
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -120,12 +122,13 @@ public class Controller implements Initializable {
 
     public void sendMsg(ActionEvent actionEvent) {
         if (textField.getText().trim().length() == 0) {
+            // Если нет ничего или пробелы то вылетает из метода и ничего не отправляет
             return;
         }
         try {
-            out.writeUTF(textField.getText());
-            textField.clear();
-            textField.requestFocus();
+            out.writeUTF(textField.getText()); // Мы отправляем на сервер сообщение, которое в такс филд
+            textField.clear(); // Очищаем Филд
+            textField.requestFocus(); // Делаем фокус на него
         } catch (IOException e) {
             e.printStackTrace();
         }

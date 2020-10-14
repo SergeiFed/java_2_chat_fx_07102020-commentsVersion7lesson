@@ -11,11 +11,11 @@ import java.util.Scanner;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Server {
-    private List<ClientHandler> clients;
+    private List<ClientHandler> clients; // лист входящий клиентов
     private AuthService authService;
 
     public Server() {
-        clients = new CopyOnWriteArrayList<>();
+        clients = new CopyOnWriteArrayList<>(); // создаем арай лист потокобезопасный
         authService = new SimpleAuthService();
         ServerSocket server = null;
         Socket socket = null;
@@ -45,7 +45,8 @@ public class Server {
             }
         }
     }
-
+    // Этот метод проходится по всем клиентам и добавляет сообщение ему (можно наверное его как-то изменить либо для него создать метод для
+    // того чтобы конкретному пользователю отправлять)
     public void broadcastMsg(ClientHandler sender, String msg) {
         String message = String.format("[ %s ]: %s", sender.getNickname(), msg);
         for (ClientHandler c : clients) {
@@ -53,13 +54,16 @@ public class Server {
         }
     }
 
+    // Метод добавления клиента в лист
     public void subscribe(ClientHandler clientHandler) {
         clients.add(clientHandler);
     }
 
+    // Метод убирания клиента из листа
     public void unsubscribe(ClientHandler clientHandler) {
         clients.remove(clientHandler);
     }
+
 
     public AuthService getAuthService() {
         return authService;
